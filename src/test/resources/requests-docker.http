@@ -1,0 +1,64 @@
+###
+
+https://server.local:8443/users/cards/getAll
+Authorization: Rx8j2BUXoBojF7jxV//tNwbL1hnvGsnAQp1bz7cVzNgqAnYF02TrelfgrAWP72y8WYLSUpMzX83fG26+H7TC2g==
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+POST https://server.local:8443/users/register
+
+{
+  "username": {{$uuid}},
+  "password": "password"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.global.set("registration_token", response.body.token);
+});
+%}
+
+###
+
+https://server.local:8443/users/cards/getAll
+Authorization: {{registration_token}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+POST https://server.local:8443/users/login
+Content-Type: application/json
+
+{
+  "username": "student",
+  "password": "qwerty123"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.global.set("login_token", response.body.token);
+});
+%}
+
+###
+
+https://server.local:8443/users/cards/getAll
+Authorization: {{login_token}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}

@@ -1,0 +1,13 @@
+#если не добавятся файлы
+#git add -f apache-tomcat-10.0.11/conf/server.xml
+#git add -f apache-tomcat-10.0.11/conf/certs
+/apache-tomcat*/**/*
+!/apache-tomcat*/conf
+!/apache-tomcat*/conf/server.xml
+!/apache-tomcat*/conf/certs
+!/apache-tomcat*/conf/certs/*.jks
+.idea
+target
+*.zip
+Thumbs.db*
+.DS_Store

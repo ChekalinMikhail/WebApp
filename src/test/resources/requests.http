@@ -1,0 +1,37 @@
+###
+# Registration
+POST https://server.local:8443/users/register
+Content-Type: application/json
+
+{
+  "username": {{$uuid}},
+  "password": "top-secret"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+POST https://server.local:8443/users/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "god"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+    client.global.set("login_token", response.body.token);
+});
+%}
+
+###
+
+GET https://server.local:8443/users/cards/getAll
+Authorization: {{login_token}}

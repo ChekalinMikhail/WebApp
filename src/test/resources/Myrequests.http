@@ -1,0 +1,112 @@
+###
+# Registration
+POST https://server.local:8443/users/register
+Content-Type: application/json
+
+{
+  "username": {{$uuid}},
+  "password": "top-secret"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+#### admin-god student-qwerty123
+
+POST https://server.local:8443/users/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "god"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+
+#### получаем карты по токену админа
+
+GET https://server.local:8443/users/cards/getAll
+Authorization: SkSY0MGRfC3HfdeAMiid9BJ1Hhq5wHcNvb0fNQnQtjBeOiVDLRZjZRY33KkowdbwVypfnw8Pt/Je6Hcl/UBCkA==
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### получаем карты по токену нового пользователя, надо создать пользователя и скопировать токен e2e01f2a-e594-404d-9503-4534db053e96
+
+GET https://server.local:8443/users/cards/getAll
+Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
+
+###создаём карту у нового пользователя, надо создать пользователя и скопировать токен
+
+POST https://server.local:8443/users/cards/order
+Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
+
+###получаем карту по cardId не принадлежащую админу
+
+GET https://server.local:8443/users/cards/getByCardId/4
+Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
+
+###получаем карту по cardId не принадлежащую пользователю
+
+GET https://server.local:8443/users/cards/getByCardId/4
+Authorization: OrRYY1gXplXeVryC9+xsDTOQAly1xrchC26lmS2K33QFcRzLoh6Y4C1aZn93qJd6rFsa2jieixmzr5H/qhFejw==
+
+###получаем карты пользователя по userId под админом
+
+GET https://server.local:8443/users/cards/getAllByUserId/2
+Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
+
+###заказываем новую карту админу
+
+POST https://server.local:8443/users/cards/order
+Authorization: Rx8j2BUXoBojF7jxV//tNwbL1hnvGsnAQp1bz7cVzNgqAnYF02TrelfgrAWP72y8WYLSUpMzX83fG26+H7TC2g==
+
+###блокируем карту админа новым пользователем
+
+DELETE https://server.local:8443/users/cards/blockById/1
+Authorization: wnoGx9lmUfNhI09xzqqP6POU4zcpU8L9Iw/SAIlWQHU9KIUxCmDxZiNvii1mgT9CAFwxRIQl7o824XG0EvPcsQ==
+
+###блокируем карту админа админом
+
+DELETE https://server.local:8443/users/cards/blockById/4
+Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
+
+###переводим деньги админом новому пользователю (транзакции заносятся в таблицу)
+
+POST https://server.local:8443/users/cards/transaction
+Content-Type: application/json
+Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
+
+{
+  "senderCardId": 3,
+  "receiverCardId": 6,
+  "transferAmount": 1000
+}
+
+###просим сгенерировать ключ для востанновления пароля студенту, ключ берем из БД руками
+
+GET https://server.local:8443/users/passwordRecovery/student
+
+###передаём на сервер имя пользователя, новый пароль и ключ для востанновления пароля
+
+POST https://server.local:8443/users/passwordRecovery
+Content-Type: application/json
+
+{
+  "username": "student",
+  "password": "studentstudent",
+  "key": "654240"
+}
+
+###
