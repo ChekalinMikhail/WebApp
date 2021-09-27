@@ -1,6 +1,7 @@
 package org.example.app.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.example.app.domain.User;
 import org.example.app.domain.UserWithPassword;
 import org.example.app.dto.*;
@@ -14,8 +15,9 @@ import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
+import java.util.logging.Level;
 
-
+@Log
 @RequiredArgsConstructor
 public class UserService implements AuthenticationProvider, AnonymousProvider {
     private final UserRepository repository;
@@ -97,6 +99,8 @@ public class UserService implements AuthenticationProvider, AnonymousProvider {
     public void passwordRecoveryInquiry(String userName) {
         final var user = repository.getByUsername(userName).orElseThrow(UserNotFoundException::new);
         final var key = PasswordRecoveryKeyGenerator.generate();
+        log.log(Level.INFO, "passwordRecovery key" + key);
+
         repository.createKeyForPasswordRecovery(user.getId(), key);
     }
 

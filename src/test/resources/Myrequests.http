@@ -54,12 +54,12 @@ GET https://server.dev.local:8443/users/cards/getAll
 ###
 
 GET https://server.dev.local:8443/users/cards/getAll
-Cookie: token=0Rp3cD0UMEzxwr5bsvgOLklc/Kv6cP52mAz6ovrih8y9RYGOoMI+yfjmwr7lq9YiKgqE+vSIlo+f0ck5+8HTMw==;
+Cookie: token=HnUTKWlARjHAEkg4e496ItQl0RhuNanT5qbpU9kuPHvnP5vVBI5/Te23eQNkWZVxzx8rFmv4OyLCLbzT5ov0iQ==;
 
 ###создаём карту у нового пользователя, надо создать пользователя и скопировать токен
 
 POST https://server.dev.local:8443/users/cards/order
-Authorization: ZnPAO7C84m85fFMmVlQjhl4hE31pAgu5HTm7DlqcHXtDT2SkXsqPlMLjtRl953YKw2B8DDwcs3LQNxCymHpWdQ==
+Authorization: HnUTKWlARjHAEkg4e496ItQl0RhuNanT5qbpU9kuPHvnP5vVBI5/Te23eQNkWZVxzx8rFmv4OyLCLbzT5ov0iQ==
 
 ###получаем карту по cardId не принадлежащую админу
 
