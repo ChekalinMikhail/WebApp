@@ -12,11 +12,11 @@ public class UserHelper {
   private UserHelper() {
   }
 
-  public static User getUser(HttpServletRequest req) {
+  public static User getUserFromAuth(HttpServletRequest req) {
     return ((User) ((Authentication) req.getAttribute(RequestAttributes.AUTH_ATTR)).getPrincipal());
   }
 
-  public static String getUsername(HttpServletRequest req) {
+  public static String getUsernameFromUrl(HttpServletRequest req) {
     return  ((Matcher) req.getAttribute(RequestAttributes.PATH_MATCHER_ATTR)).group("userName");
   }
 

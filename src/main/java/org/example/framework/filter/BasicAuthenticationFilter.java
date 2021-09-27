@@ -9,13 +9,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.framework.attribute.ContextAttributes;
 import org.example.framework.attribute.RequestAttributes;
-import org.example.framework.security.*;
+import org.example.framework.security.AuthenticationException;
+import org.example.framework.security.AuthenticationProvider;
+import org.example.framework.security.TokenAuthentication;
 import org.example.framework.util.AuthenticationHelper;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.regex.Pattern;
 
 
-public class TokenAuthenticationFilter extends HttpFilter {
+public class BasicAuthenticationFilter extends HttpFilter {
     private AuthenticationProvider provider;
 
     @Override
@@ -31,15 +36,31 @@ public class TokenAuthenticationFilter extends HttpFilter {
             return;
         }
 
-        final var token = req.getHeader("Authorization");
+        final var authorization = req.getHeader("Authorization");
 
-        if (token == null || token.startsWith("Basic")) {
+        if (authorization == null) {
             super.doFilter(req, res, chain);
             return;
         }
 
+        final var basicPattern = Pattern.compile("^Basic (?<basicAuth>\\S+)$");
+        final var matcher = basicPattern.matcher(authorization);
+        if (!matcher.matches()) {
+            super.doFilter(req, res, chain);
+            return;
+        }
+
+        final var basicAuth = URLDecoder.decode(matcher.group("basicAuth"), StandardCharsets.UTF_8);
+
+        final var basicAuthSplit = basicAuth.split(":");
+
+        if(basicAuthSplit.length != 2) {
+            res.sendError(401);
+            return;
+        }
+
         try {
-            final var authentication = provider.tokenAuthenticate(new TokenAuthentication(token, null));
+            final var authentication = provider.basicAuthenticate(new TokenAuthentication(basicAuth, null));
             req.setAttribute(RequestAttributes.AUTH_ATTR, authentication);
         } catch (AuthenticationException e) {
             res.sendError(401);

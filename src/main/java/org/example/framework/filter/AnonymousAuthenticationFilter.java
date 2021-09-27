@@ -9,19 +9,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.framework.attribute.ContextAttributes;
 import org.example.framework.attribute.RequestAttributes;
-import org.example.framework.security.*;
+import org.example.framework.security.AnonymousProvider;
+import org.example.framework.security.AuthenticationException;
+import org.example.framework.security.TokenAuthentication;
 import org.example.framework.util.AuthenticationHelper;
 
 import java.io.IOException;
 
 
-public class TokenAuthenticationFilter extends HttpFilter {
-    private AuthenticationProvider provider;
+public class AnonymousAuthenticationFilter extends HttpFilter {
+    private AnonymousProvider provider;
 
     @Override
     public void init(FilterConfig config) throws ServletException {
         super.init(config);
-        provider = ((AuthenticationProvider) getServletContext().getAttribute(ContextAttributes.AUTH_PROVIDER_ATTR));
+        provider = ((AnonymousProvider) getServletContext().getAttribute(ContextAttributes.ANON_PROVIDER_ATTR));
     }
 
     @Override
@@ -31,15 +33,8 @@ public class TokenAuthenticationFilter extends HttpFilter {
             return;
         }
 
-        final var token = req.getHeader("Authorization");
-
-        if (token == null || token.startsWith("Basic")) {
-            super.doFilter(req, res, chain);
-            return;
-        }
-
         try {
-            final var authentication = provider.tokenAuthenticate(new TokenAuthentication(token, null));
+            final var authentication = provider.provide();
             req.setAttribute(RequestAttributes.AUTH_ATTR, authentication);
         } catch (AuthenticationException e) {
             res.sendError(401);

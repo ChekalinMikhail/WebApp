@@ -35,8 +35,7 @@ public class UserRepository {
 
     private final RowMapper<Token> rowMapperToken = resultSet -> new Token(
             resultSet.getString("token"),
-            resultSet.getTimestamp("created"),
-            resultSet.getTimestamp("used")
+            resultSet.getTimestamp("created")
     );
 
     public Optional<User> getByUsername(String username) {
@@ -96,17 +95,9 @@ public class UserRepository {
 
     public Optional<Token> findToken(String token) {
         // language=PostgreSQL
-        jdbcTemplate.update(
-                """
-                        UPDATE tokens SET used = current_timestamp WHERE token = ?
-                        """,
-                token
-        );
-
-        // language=PostgreSQL
         return jdbcTemplate.queryOne(
                 """
-                        SELECT token, created, used FROM tokens WHERE token = ?
+                        SELECT token, created FROM tokens WHERE token = ?
                         """,
                 rowMapperToken,
                 token
@@ -117,12 +108,25 @@ public class UserRepository {
         // language=PostgreSQL
         return jdbcTemplate.queryOne(
                 """
-                        SELECT u.id, u.username, t.token, t.created, t.used FROM tokens t
+                        SELECT u.id, u.username, t.token, t.created FROM tokens t
                         JOIN users u ON t."userId" = u.id
                         WHERE t.token = ?
                         """,
                 rowMapper,
                 token
+        );
+    }
+
+    public Optional<User> findUserByLogin(String login) {
+        // language=PostgreSQL
+        return jdbcTemplate.queryOne(
+                """
+                        SELECT u.id, u.username, t.token, t.created FROM tokens t
+                        JOIN users u ON t."userId" = u.id
+                        WHERE u.username = ?
+                        """,
+                rowMapper,
+                login
         );
     }
 
@@ -159,7 +163,7 @@ public class UserRepository {
         // language=PostgreSQL
         jdbcTemplate.update(
                 """
-                        UPDATE tokens SET created = current_timestamp, used = current_timestamp WHERE token = ?
+                        UPDATE tokens SET created = current_timestamp WHERE token = ?
                         """,
                 token
         );

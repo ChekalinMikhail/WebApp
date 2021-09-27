@@ -34,7 +34,7 @@ client.test("Request executed successfully", function() {
 #### получаем карты по токену админа
 
 GET https://server.local:8443/users/cards/getAll
-Authorization: SkSY0MGRfC3HfdeAMiid9BJ1Hhq5wHcNvb0fNQnQtjBeOiVDLRZjZRY33KkowdbwVypfnw8Pt/Je6Hcl/UBCkA==
+Authorization: Ohywq1ktUMyWZi+25VaFaDWb9DtZqNHziTMHXirudY/j+uppd0rJGN+oiLyTRxTBwozFgkylkipr4jcetEnrHA==
 
 > {%
 client.test("Request executed successfully", function() {
@@ -45,12 +45,21 @@ client.test("Request executed successfully", function() {
 ### получаем карты по токену нового пользователя, надо создать пользователя и скопировать токен e2e01f2a-e594-404d-9503-4534db053e96
 
 GET https://server.local:8443/users/cards/getAll
-Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
+Authorization: sXxK5soaaXHI5UmpkTg2jtyOxRjWKmhPwgvluWjef9UE6pGD1ithsG+C7hZfcpTCdFm6RGE3HuWt6NaNjd1AAA==
+
+###
+
+GET https://server.local:8443/users/cards/getAll
+
+###
+
+GET https://server.local:8443/users/cards/getAll
+Cookie: token=0Rp3cD0UMEzxwr5bsvgOLklc/Kv6cP52mAz6ovrih8y9RYGOoMI+yfjmwr7lq9YiKgqE+vSIlo+f0ck5+8HTMw==;
 
 ###создаём карту у нового пользователя, надо создать пользователя и скопировать токен
 
 POST https://server.local:8443/users/cards/order
-Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
+
 
 ###получаем карту по cardId не принадлежащую админу
 
@@ -59,8 +68,8 @@ Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsY
 
 ###получаем карту по cardId не принадлежащую пользователю
 
-GET https://server.local:8443/users/cards/getByCardId/4
-Authorization: OrRYY1gXplXeVryC9+xsDTOQAly1xrchC26lmS2K33QFcRzLoh6Y4C1aZn93qJd6rFsa2jieixmzr5H/qhFejw==
+GET https://server.local:8443/users/cards/getByCardId/1
+Authorization: Basic student:qwerty123
 
 ###получаем карты пользователя по userId под админом
 
@@ -70,7 +79,7 @@ Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsY
 ###заказываем новую карту админу
 
 POST https://server.local:8443/users/cards/order
-Authorization: Rx8j2BUXoBojF7jxV//tNwbL1hnvGsnAQp1bz7cVzNgqAnYF02TrelfgrAWP72y8WYLSUpMzX83fG26+H7TC2g==
+Authorization: Basic student:qwerty123
 
 ###блокируем карту админа новым пользователем
 
@@ -86,10 +95,10 @@ Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsY
 
 POST https://server.local:8443/users/cards/transaction
 Content-Type: application/json
-Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
+Authorization: Basic student:qwerty123
 
 {
-  "senderCardId": 3,
+  "senderCardId": 4,
   "receiverCardId": 6,
   "transferAmount": 1000
 }
@@ -106,7 +115,7 @@ Content-Type: application/json
 {
   "username": "student",
   "password": "studentstudent",
-  "key": "654240"
+  "key": "026266"
 }
 
 ###

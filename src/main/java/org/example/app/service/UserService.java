@@ -2,14 +2,18 @@ package org.example.app.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.app.domain.User;
+import org.example.app.domain.UserWithPassword;
 import org.example.app.dto.*;
 import org.example.app.exception.*;
 import org.example.app.repository.UserRepository;
 import org.example.app.util.PasswordRecoveryKeyGenerator;
 import org.example.app.util.ReadingRoles;
+import org.example.app.util.TokenLifeTime;
 import org.example.framework.security.*;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Date;
 
 
 @RequiredArgsConstructor
@@ -19,12 +23,30 @@ public class UserService implements AuthenticationProvider, AnonymousProvider {
     private final StringKeyGenerator keyGenerator;
 
     @Override
-    public Authentication authenticate(Authentication authentication) {
-        final var token = (String) authentication.getPrincipal();
-        final var tokenWithLifeTime = repository.findToken(token).orElseThrow(AuthenticationException::new);
-        final var tokenLifeTime = ((tokenWithLifeTime.getLastUseTokenTime().getTime() - tokenWithLifeTime.getCreateTokenTime().getTime()) / 1000);
+    public Authentication basicAuthenticate(Authentication authentication) {
+        final var login = ((String) authentication.getPrincipal()).split(":")[0];
+        final var password = ((String) authentication.getPrincipal()).split(":")[1];
+        final var hash = passwordEncoder.encode(password);
 
-        if (tokenLifeTime > 600) {
+        final var userWithPassword = repository.getByUsernameWithPassword(login).orElseThrow(UserNotFoundException::new);
+        if (!passwordEncoder.matches(password, userWithPassword.getPassword())) {
+            throw new PasswordNotMatchesException();
+        }
+
+        final var user = repository.findUserByLogin(login).orElseThrow(AuthenticationException::new);
+        final var roles = repository.getRoles(user.getId());
+        final var convertedRoles = ReadingRoles.readRoles(roles);
+
+        return new BasicAuthentication(user, null, convertedRoles, true);
+    }
+
+    @Override
+    public Authentication tokenAuthenticate(Authentication authentication) throws AuthenticationException {
+        final var token = (String) authentication.getPrincipal();
+        final var tokenWithCreateTime = repository.findToken(token).orElseThrow(AuthenticationException::new);
+        final var tokenLifeTime = new Date().getTime() - tokenWithCreateTime.getCreate().getTime();
+
+        if (tokenLifeTime > TokenLifeTime.oneHour) {
             throw new TokenLifeTimeException();
         }
 

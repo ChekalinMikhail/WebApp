@@ -9,6 +9,5 @@ import java.util.Date;
 @Data
 public class Token {
     private String token;
-    private Date createTokenTime;
-    private Date lastUseTokenTime;
+    private Date create;
 }

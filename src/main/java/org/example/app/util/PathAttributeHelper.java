@@ -1,9 +1,7 @@
 package org.example.app.util;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.app.domain.User;
 import org.example.framework.attribute.RequestAttributes;
-import org.example.framework.security.Authentication;
 
 import java.util.regex.Matcher;
 

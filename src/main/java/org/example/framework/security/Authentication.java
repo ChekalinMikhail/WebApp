@@ -6,7 +6,7 @@ public interface Authentication {
   Object getPrincipal();
   Object getCredentials();
   Collection<String> getAuthorities();
-  boolean isAuthenticated(); // request -> false, response -> true
+  boolean isAuthenticated();
   void setAuthenticated(boolean authenticated);
   void eraseCredentials();
 }

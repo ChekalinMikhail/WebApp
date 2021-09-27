@@ -18,6 +18,13 @@
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
+    <session-config>
+        <cookie-config>
+            <http-only>true</http-only>
+            <secure>true</secure>
+        </cookie-config>
+    </session-config>
+
     <!-- https://tomcat.apache.org/tomcat-10.0-doc/config/filter.html -->
     <filter>
         <filter-name>cors-filter</filter-name>
@@ -39,11 +46,38 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>token-filter</filter-name>
+        <filter-name>basic-authentication-filter</filter-name>
+        <filter-class>org.example.framework.filter.BasicAuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>basic-authentication-filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>cookie-authentication-filter</filter-name>
+        <filter-class>org.example.framework.filter.CookieAuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>cookie-authentication-filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>token-authentication-filter</filter-name>
         <filter-class>org.example.framework.filter.TokenAuthenticationFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>token-filter</filter-name>
+        <filter-name>token-authentication-filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>anonymous-authentication-filter</filter-name>
+        <filter-class>org.example.framework.filter.AnonymousAuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>anonymous-authentication-filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReadingRoles {
-    public ReadingRoles() {
+    private ReadingRoles() {
     }
     public static List<String> readRoles(List<UserWithRole> roles) {
         final var result = new ArrayList<String>();

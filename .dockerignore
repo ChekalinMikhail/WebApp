@@ -1,6 +1,7 @@
 /apache-tomcat*
 !/apache-tomcat-10.0.11/conf/server.xml
 !/apache-tomcat-10.0.11/conf/certs
+/certs*
 
 ### Regular files ###
 /out/

@@ -11,8 +11,7 @@ CREATE TABLE tokens
 (
     token    TEXT PRIMARY KEY,
     "userId" BIGINT      NOT NULL REFERENCES users,
-    created  timestamptz NOT NULL DEFAULT current_timestamp,
-    used     timestamptz NOT NULL DEFAULT current_timestamp
+    created  timestamptz NOT NULL DEFAULT current_timestamp
 );
 
 CREATE TABLE roles

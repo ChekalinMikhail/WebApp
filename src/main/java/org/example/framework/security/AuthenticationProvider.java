@@ -1,5 +1,6 @@
 package org.example.framework.security;
 
 public interface AuthenticationProvider {
-  Authentication authenticate(Authentication authentication) throws AuthenticationException;
+  Authentication basicAuthenticate(Authentication authentication) throws AuthenticationException;
+  Authentication tokenAuthenticate(Authentication authentication) throws AuthenticationException;
 }
