@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   webapp:
-    image: ghcr.io/twister1803/web-app
+    image: ghcr.io/twister1803/web-app:main
     ports:
       - "8080:8080"
       - "8443:8443"

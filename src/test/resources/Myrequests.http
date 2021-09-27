@@ -1,6 +1,6 @@
 ###
 # Registration
-POST https://server.local:8443/users/register
+POST https://server.dev.local:8443/users/register
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ client.test("Request executed successfully", function() {
 
 #### admin-god student-qwerty123
 
-POST https://server.local:8443/users/login
+POST https://server.dev.local:8443/users/login
 Content-Type: application/json
 
 {
@@ -33,8 +33,8 @@ client.test("Request executed successfully", function() {
 
 #### получаем карты по токену админа
 
-GET https://server.local:8443/users/cards/getAll
-Authorization: Ohywq1ktUMyWZi+25VaFaDWb9DtZqNHziTMHXirudY/j+uppd0rJGN+oiLyTRxTBwozFgkylkipr4jcetEnrHA==
+GET https://server.dev.local:8443/users/cards/getAll
+Authorization: ZnPAO7C84m85fFMmVlQjhl4hE31pAgu5HTm7DlqcHXtDT2SkXsqPlMLjtRl953YKw2B8DDwcs3LQNxCymHpWdQ==
 
 > {%
 client.test("Request executed successfully", function() {
@@ -44,56 +44,56 @@ client.test("Request executed successfully", function() {
 
 ### получаем карты по токену нового пользователя, надо создать пользователя и скопировать токен e2e01f2a-e594-404d-9503-4534db053e96
 
-GET https://server.local:8443/users/cards/getAll
-Authorization: sXxK5soaaXHI5UmpkTg2jtyOxRjWKmhPwgvluWjef9UE6pGD1ithsG+C7hZfcpTCdFm6RGE3HuWt6NaNjd1AAA==
+GET https://server.dev.local:8443/users/cards/getAll
+Authorization: ZnPAO7C84m85fFMmVlQjhl4hE31pAgu5HTm7DlqcHXtDT2SkXsqPlMLjtRl953YKw2B8DDwcs3LQNxCymHpWdQ==
 
 ###
 
-GET https://server.local:8443/users/cards/getAll
+GET https://server.dev.local:8443/users/cards/getAll
 
 ###
 
-GET https://server.local:8443/users/cards/getAll
+GET https://server.dev.local:8443/users/cards/getAll
 Cookie: token=0Rp3cD0UMEzxwr5bsvgOLklc/Kv6cP52mAz6ovrih8y9RYGOoMI+yfjmwr7lq9YiKgqE+vSIlo+f0ck5+8HTMw==;
 
 ###создаём карту у нового пользователя, надо создать пользователя и скопировать токен
 
-POST https://server.local:8443/users/cards/order
-
+POST https://server.dev.local:8443/users/cards/order
+Authorization: ZnPAO7C84m85fFMmVlQjhl4hE31pAgu5HTm7DlqcHXtDT2SkXsqPlMLjtRl953YKw2B8DDwcs3LQNxCymHpWdQ==
 
 ###получаем карту по cardId не принадлежащую админу
 
-GET https://server.local:8443/users/cards/getByCardId/4
+GET https://server.dev.local:8443/users/cards/getByCardId/4
 Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
 
 ###получаем карту по cardId не принадлежащую пользователю
 
-GET https://server.local:8443/users/cards/getByCardId/1
+GET https://server.dev.local:8443/users/cards/getByCardId/1
 Authorization: Basic student:qwerty123
 
 ###получаем карты пользователя по userId под админом
 
-GET https://server.local:8443/users/cards/getAllByUserId/2
+GET https://server.dev.local:8443/users/cards/getAllByUserId/2
 Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
 
 ###заказываем новую карту админу
 
-POST https://server.local:8443/users/cards/order
+POST https://server.dev.local:8443/users/cards/order
 Authorization: Basic student:qwerty123
 
 ###блокируем карту админа новым пользователем
 
-DELETE https://server.local:8443/users/cards/blockById/1
+DELETE https://server.dev.local:8443/users/cards/blockById/1
 Authorization: wnoGx9lmUfNhI09xzqqP6POU4zcpU8L9Iw/SAIlWQHU9KIUxCmDxZiNvii1mgT9CAFwxRIQl7o824XG0EvPcsQ==
 
 ###блокируем карту админа админом
 
-DELETE https://server.local:8443/users/cards/blockById/4
+DELETE https://server.dev.local:8443/users/cards/blockById/4
 Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
 
 ###переводим деньги админом новому пользователю (транзакции заносятся в таблицу)
 
-POST https://server.local:8443/users/cards/transaction
+POST https://server.dev.local:8443/users/cards/transaction
 Content-Type: application/json
 Authorization: Basic student:qwerty123
 
@@ -105,11 +105,11 @@ Authorization: Basic student:qwerty123
 
 ###просим сгенерировать ключ для востанновления пароля студенту, ключ берем из БД руками
 
-GET https://server.local:8443/users/passwordRecovery/student
+GET https://server.dev.local:8443/users/passwordRecovery/student
 
 ###передаём на сервер имя пользователя, новый пароль и ключ для востанновления пароля
 
-POST https://server.local:8443/users/passwordRecovery
+POST https://server.dev.local:8443/users/passwordRecovery
 Content-Type: application/json
 
 {

@@ -1,6 +1,6 @@
 ###
 # Registration
-POST https://server.local:8443/users/register
+POST https://server.dev.local:8443/users/register
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ client.test("Request executed successfully", function() {
 
 ###
 
-POST https://server.local:8443/users/login
+POST https://server.dev.local:8443/users/login
 Content-Type: application/json
 
 {
@@ -33,5 +33,5 @@ client.test("Request executed successfully", function() {
 
 ###
 
-GET https://server.local:8443/users/cards/getAll
+GET https://server.dev.local:8443/users/cards/getAll
 Authorization: {{login_token}}
