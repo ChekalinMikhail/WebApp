@@ -17,7 +17,7 @@ CREATE TABLE tokens
 CREATE TABLE roles
 (
     "userId" BIGINT NOT NULL REFERENCES users,
-    role     BIGINT NOT NULL DEFAULT 2 CHECK ( role < 3 AND role > 0)
+    role     TEXT   NOT NULL DEFAULT 'user'
 );
 
 CREATE TABLE cards
@@ -31,7 +31,7 @@ CREATE TABLE cards
 
 CREATE TABLE transactions
 (
-    id             BIGSERIAL PRIMARY KEY,
+    id               BIGSERIAL PRIMARY KEY,
     "senderCardId"   BIGINT NOT NULL REFERENCES cards,
     "receiverCardId" BIGINT NOT NULL REFERENCES cards,
     "transferAmount" BIGINT NOT NULL

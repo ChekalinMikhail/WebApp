@@ -25,7 +25,7 @@ public class UserRepository {
 
     private final RowMapper<UserRole> rowMapperUserRole = resultSet -> new UserRole(
             resultSet.getLong("userId"),
-            resultSet.getLong("role")
+            resultSet.getString("role")
     );
 
     private final RowMapper<PasswordRecoveryKey> rowMapperPasswordRecoveryKey = resultSet -> new PasswordRecoveryKey(

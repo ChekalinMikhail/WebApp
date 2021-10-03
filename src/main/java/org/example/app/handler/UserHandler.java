@@ -1,7 +1,6 @@
 package org.example.app.handler;
 
 import com.google.gson.Gson;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

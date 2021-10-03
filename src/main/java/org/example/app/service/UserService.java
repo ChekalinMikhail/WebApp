@@ -3,12 +3,11 @@ package org.example.app.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.example.app.domain.User;
-import org.example.app.domain.UserWithPassword;
+import org.example.app.domain.UserRole;
 import org.example.app.dto.*;
 import org.example.app.exception.*;
 import org.example.app.repository.UserRepository;
 import org.example.app.util.PasswordRecoveryKeyGenerator;
-import org.example.app.util.ReadingRoles;
 import org.example.app.util.TokenLifeTime;
 import org.example.framework.security.*;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
@@ -16,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 @Log
 @RequiredArgsConstructor
@@ -36,10 +36,9 @@ public class UserService implements AuthenticationProvider, AnonymousProvider {
         }
 
         final var user = repository.findUserByLogin(login).orElseThrow(AuthenticationException::new);
-        final var roles = repository.getRoles(user.getId());
-        final var convertedRoles = ReadingRoles.readRoles(roles);
+        final var roles = repository.getRoles(user.getId()).stream().map(UserRole::getRole).collect(Collectors.toList());
 
-        return new BasicAuthentication(user, null, convertedRoles, true);
+        return new BasicAuthentication(user, null, roles, true);
     }
 
     @Override
@@ -55,10 +54,9 @@ public class UserService implements AuthenticationProvider, AnonymousProvider {
         repository.updateTokenLifeTime(token);
 
         final var user = repository.findUserByToken(token).orElseThrow(AuthenticationException::new);
-        final var roles = repository.getRoles(user.getId());
-        final var convertedRoles = ReadingRoles.readRoles(roles);
+        final var roles = repository.getRoles(user.getId()).stream().map(UserRole::getRole).collect(Collectors.toList());
 
-        return new TokenAuthentication(user, null, convertedRoles, true);
+        return new TokenAuthentication(user, null, roles, true);
     }
 
     @Override
