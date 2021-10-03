@@ -25,10 +25,9 @@ public class UserService implements AuthenticationProvider, AnonymousProvider {
     private final StringKeyGenerator keyGenerator;
 
     @Override
-    public Authentication basicAuthenticate(Authentication authentication) {
-        final var login = ((String) authentication.getPrincipal()).split(":")[0];
-        final var password = ((String) authentication.getPrincipal()).split(":")[1];
-        final var hash = passwordEncoder.encode(password);
+    public Authentication authenticate(BasicAuthentication authentication) {
+        final var login = ((String) authentication.getPrincipal());
+        final var password = ((String) authentication.getCredentials());
 
         final var userWithPassword = repository.getByUsernameWithPassword(login).orElseThrow(UserNotFoundException::new);
         if (!passwordEncoder.matches(password, userWithPassword.getPassword())) {
@@ -42,7 +41,7 @@ public class UserService implements AuthenticationProvider, AnonymousProvider {
     }
 
     @Override
-    public Authentication tokenAuthenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(TokenAuthentication authentication) throws AuthenticationException {
         final var token = (String) authentication.getPrincipal();
         final var tokenWithCreateTime = repository.findToken(token).orElseThrow(AuthenticationException::new);
         final var tokenLifeTime = new Date().getTime() - tokenWithCreateTime.getCreate().getTime();

@@ -11,6 +11,7 @@ import org.example.framework.attribute.ContextAttributes;
 import org.example.framework.attribute.RequestAttributes;
 import org.example.framework.security.AuthenticationException;
 import org.example.framework.security.AuthenticationProvider;
+import org.example.framework.security.BasicAuthentication;
 import org.example.framework.security.TokenAuthentication;
 import org.example.framework.util.AuthenticationHelper;
 
@@ -59,8 +60,11 @@ public class BasicAuthenticationFilter extends HttpFilter {
             return;
         }
 
+        final var login = basicAuthSplit[0];
+        final var password = basicAuthSplit[1];
+
         try {
-            final var authentication = provider.basicAuthenticate(new TokenAuthentication(basicAuth, null));
+            final var authentication = provider.authenticate(new BasicAuthentication(login, password));
             req.setAttribute(RequestAttributes.AUTH_ATTR, authentication);
         } catch (AuthenticationException e) {
             res.sendError(401);

@@ -39,7 +39,7 @@ public class TokenAuthenticationFilter extends HttpFilter {
         }
 
         try {
-            final var authentication = provider.tokenAuthenticate(new TokenAuthentication(token, null));
+            final var authentication = provider.authenticate(new TokenAuthentication(token, null));
             req.setAttribute(RequestAttributes.AUTH_ATTR, authentication);
         } catch (AuthenticationException e) {
             res.sendError(401);
