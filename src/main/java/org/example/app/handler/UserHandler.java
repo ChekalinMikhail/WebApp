@@ -1,6 +1,7 @@
 package org.example.app.handler;
 
 import com.google.gson.Gson;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -36,11 +37,10 @@ public class UserHandler {
         try {
             final var requestDto = gson.fromJson(req.getReader(), LoginRequestDto.class);
             final var responseDto = service.login(requestDto);
-            resp.setHeader("Set-Cookie", "token=" + responseDto.getToken() + "; Secure; HttpOnly");
-//            final var cookie = new Cookie("token", responseDto.getToken());
-//            cookie.setHttpOnly(true);
-//            cookie.setSecure(true);
-//            resp.addCookie(cookie);
+            final var cookie = new Cookie("token", responseDto.getToken());
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            resp.addCookie(cookie);
             resp.setHeader("Content-Type", "application/json");
             resp.getWriter().write(gson.toJson(responseDto));
         } catch (IOException e) {
