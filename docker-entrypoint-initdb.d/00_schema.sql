@@ -32,9 +32,9 @@ CREATE TABLE cards
 CREATE TABLE transactions
 (
     id             BIGSERIAL PRIMARY KEY,
-    senderCardId   BIGINT NOT NULL REFERENCES cards,
-    receiverCardId BIGINT NOT NULL REFERENCES cards,
-    transferAmount BIGINT NOT NULL
+    "senderCardId"   BIGINT NOT NULL REFERENCES cards,
+    "receiverCardId" BIGINT NOT NULL REFERENCES cards,
+    "transferAmount" BIGINT NOT NULL
 );
 
 CREATE TABLE password_recovery_keys

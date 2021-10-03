@@ -45,7 +45,7 @@ public class CardRepository {
         // language=PostgreSQL
         jdbcTemplate.update(
                 """
-                        INSERT INTO transactions(senderCardId, receiverCardId, transferAmount) VALUES (?, ? , ?) 
+                        INSERT INTO transactions("senderCardId", "receiverCardId", "transferAmount") VALUES (?, ? , ?)
                         """,
                 senderCardId,
                 receiverCardId,
