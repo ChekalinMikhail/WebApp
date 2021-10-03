@@ -5,7 +5,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class UserWithRole {
+public class UserRole {
   private long userId;
   private long role;
 }
