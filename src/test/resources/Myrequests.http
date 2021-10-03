@@ -54,7 +54,7 @@ GET https://server.dev.local:8443/users/cards/getAll
 ###
 
 GET https://server.dev.local:8443/users/cards/getAll
-Cookie: token=HnUTKWlARjHAEkg4e496ItQl0RhuNanT5qbpU9kuPHvnP5vVBI5/Te23eQNkWZVxzx8rFmv4OyLCLbzT5ov0iQ==;
+Authorization: Basic admin:god
 
 ###создаём карту у нового пользователя, надо создать пользователя и скопировать токен
 
@@ -63,8 +63,8 @@ Authorization: HnUTKWlARjHAEkg4e496ItQl0RhuNanT5qbpU9kuPHvnP5vVBI5/Te23eQNkWZVxz
 
 ###получаем карту по cardId не принадлежащую админу
 
-GET https://server.dev.local:8443/users/cards/getByCardId/4
-Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsYtji1qJXWdixFfNMBD+TKA==
+GET https://server.dev.local:8443/users/cards/getByCardId/1
+Authorization: Basic admin:god
 
 ###получаем карту по cardId не принадлежащую пользователю
 
@@ -95,12 +95,12 @@ Authorization: HNcp7uer4cvKdWNqQgmf4MiEs/iN2WJ6mISyVvXQczqbGJUUmX0eMVIQnmePIagsY
 
 POST https://server.dev.local:8443/users/cards/transaction
 Content-Type: application/json
-Authorization: Basic student:qwerty123
+Authorization: Basic admin:god
 
 {
-  "senderCardId": 4,
-  "receiverCardId": 6,
-  "transferAmount": 1000
+  "senderCardId": 1,
+  "receiverCardId": 5,
+  "transferAmount": 9000
 }
 
 ###просим сгенерировать ключ для востанновления пароля студенту, ключ берем из БД руками

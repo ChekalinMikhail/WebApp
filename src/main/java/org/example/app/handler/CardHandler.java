@@ -23,15 +23,7 @@ public class CardHandler {
         try {
             final var user = UserHelper.getUserFromAuth(req);
             final var transactionDto = gson.fromJson(req.getReader(), TransactionDto.class);
-            final var card = service.getCardByCardId(transactionDto.getSenderCardId());
-            final var allUserCards = service.getAllByOwnerId(user.getId());
-
-            if (!allUserCards.contains(card)) {
-                resp.sendError(403, "Forbidden");
-                return;
-            }
-
-            final var data = service.transaction(transactionDto);
+            final var data = service.transaction(user, transactionDto);
             resp.setHeader("Content-Type", "application/json");
             resp.getWriter().write(gson.toJson(data));
         } catch (IOException e) {
@@ -53,16 +45,9 @@ public class CardHandler {
     public void getById(HttpServletRequest req, HttpServletResponse resp) {
         try {
             final var user = UserHelper.getUserFromAuth(req);
-            final var allUserCards = service.getAllByOwnerId(user.getId());
             final var authorities = UserHelper.getAuthorities(req);
             final var cardId = PathAttributeHelper.getLong(req, "cardId");
-            final var card = service.getCardByCardId(cardId);
-
-            if (!authorities.contains(Roles.ROLE_ADMIN) && !allUserCards.contains(card)) {
-                resp.sendError(403, "Forbidden");
-                return;
-            }
-
+            final var card = service.getCardByCardId(user, authorities, cardId);
             resp.setHeader("Content-Type", "application/json");
             resp.getWriter().write(gson.toJson(card));
         } catch (IOException e) {
@@ -76,15 +61,9 @@ public class CardHandler {
             final var user = UserHelper.getUserFromAuth(req);
             final var authorities = UserHelper.getAuthorities(req);
             final var userId = PathAttributeHelper.getLong(req, "userId");
-            final var data = service.getAllByOwnerId(userId);
-
-            if (!authorities.contains(Roles.ROLE_ADMIN) && userId != user.getId()) {
-                resp.sendError(403, "Forbidden");
-                return;
-            }
-
+            final var cards = service.getAllByUserId(user, authorities, userId);
             resp.setHeader("Content-Type", "application/json");
-            resp.getWriter().write(gson.toJson(data));
+            resp.getWriter().write(gson.toJson(cards));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -94,13 +73,7 @@ public class CardHandler {
         try {
             final var user = UserHelper.getUserFromAuth(req);
             final var authorities = UserHelper.getAuthorities(req);
-
-            if (!authorities.contains(Roles.ROLE_USER)) {
-                resp.sendError(403, "Forbidden");
-                return;
-            }
-
-            final var card = service.orderCard(user.getId());
+            final var card = service.orderCard(user, authorities);
             resp.setHeader("Content-Type", "application/json");
             resp.getWriter().write(gson.toJson(card));
         } catch (IOException e) {
@@ -112,17 +85,8 @@ public class CardHandler {
         try {
             final var user = UserHelper.getUserFromAuth(req);
             final var authorities = UserHelper.getAuthorities(req);
-            final var allUserCards = service.getAllByOwnerId(user.getId());
             final var cardId = PathAttributeHelper.getLong(req, "cardId");
-            final var card = service.getCardByCardId(cardId);
-
-            if (!authorities.contains(Roles.ROLE_ADMIN) && !allUserCards.contains(card)) {
-                resp.sendError(403, "Forbidden");
-                return;
-            }
-
-            final var blockedCard = service.blockById(cardId);
-
+            final var blockedCard = service.blockById(user, authorities, cardId);
             resp.setHeader("Content-Type", "application/json");
             resp.getWriter().write(gson.toJson(blockedCard));
         } catch (IOException e) {
